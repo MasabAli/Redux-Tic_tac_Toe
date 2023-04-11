@@ -1,14 +1,16 @@
 import React, { useEffect } from "react";
 import "./Board.css";
 import { useDispatch, useSelector } from "react-redux";
-import { MakeMove } from "./redux/action";
-import { board, isWinner } from "./redux/action";
+import { MakeMove, checkWinner} from "./redux/action";
+
 const Board = () => {
     const board = useSelector((state) => state.board);
     const dispatch = useDispatch();
     const isWinner = useSelector((state) => state.isWinner);
-    console.log(board);
-    useEffect(() => {console.log(board)},[board]);
+    const player = useSelector((state) => state.player);
+    useEffect(() => {
+        dispatch(checkWinner());
+    },[board]);
     return (
         <>
             <div className="board">
@@ -16,6 +18,12 @@ const Board = () => {
                     <div onClick={() => dispatch(MakeMove(index))} className="cell">{cell}</div>
                 ))}
             </div>
+
+            <div className="winner">
+                {isWinner ? "You are the Winner" : `Player turn ${player}`}
+            </div>
+
+
         </>
 
     );
